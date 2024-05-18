@@ -1,0 +1,24 @@
+name: npbrs
+channels:
+  - defaults
+  - conda-forge
+  - pytorch
+  - pip
+dependencies:
+  - python=3.10.0
+  - mkl < 2022
+  - pandas
+  - numpy
+  - tqdm
+  - tensorflow
+  - tensorflow-probability
+  - pytorch
+  - torchvision 
+  - torchaudio 
+  - jupyterlab
+  - yfinance
+  - matplotlib
+  - openpyxl
+  - ipywidgets
+  - cvxopt
+  - pmdarima
