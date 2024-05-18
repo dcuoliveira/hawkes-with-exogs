@@ -1,4 +1,6 @@
 /venv/
 /.idea/
 /nphc2/
+
+# Jupyter Notebook
 .ipynb_checkpoints
