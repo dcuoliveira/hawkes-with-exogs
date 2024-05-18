@@ -1,4 +1,4 @@
-name: npbrs
+name: hwe
 channels:
   - defaults
   - conda-forge
@@ -10,15 +10,10 @@ dependencies:
   - pandas
   - numpy
   - tqdm
-  - tensorflow
-  - tensorflow-probability
   - pytorch
-  - torchvision 
-  - torchaudio 
   - jupyterlab
   - yfinance
   - matplotlib
   - openpyxl
   - ipywidgets
   - cvxopt
-  - pmdarima
