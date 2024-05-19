@@ -22,6 +22,12 @@ Download the .whl file from https://pypi.org/project/tick/#files and run:
 
 [comment]: <> (`pip install file-name.whl`)
 
+4) Clone nphc repo and add to path
+
+[comment]: <> (`git clone https://github.com/dcuoliveira/nphc.git nphc2`)
+
+[comment]: <> (`export PYTHONPATH="$PYTHONPATH:$(pwd)/nphc2"`)
+
 
 
 
