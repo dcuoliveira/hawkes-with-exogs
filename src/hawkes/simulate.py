@@ -211,7 +211,7 @@ def thinningOgataIS(T, paramsPath, todPath, num_nodes = 12, maxJumps = None, s =
                 return s,n,Ts, Ts_new, tau, lamb
     return s,n, Ts, Ts_new, -1, lamb
 
-def simulate(T , paramsPath , todPath, s0 = None, filePathName = None, Pis = None, Pi_Q0 = None, beta = 0.7479, avgSpread = 0.0169, spread0 = 3, price0 = 260):
+def simulate(T , paramsPath , todPath, s0 = None, filePathName = None, Pis = None, Pi_Q0 = None, beta = 0.7479, avgSpread = 0.0169, spread0 = 3, price0 = 260, verbose = False):
     """
     :param T: time limit of simulations
     :param paramsPath: path of fitted params
@@ -420,7 +420,8 @@ def simulate(T , paramsPath , todPath, s0 = None, filePathName = None, Pis = Non
         if len(list(dictTimestamps.keys())):
             Ts.append([list(dictTimestamps.keys())[0], TsTmp[-1], tau])
             lob.append(lob0)
-            print(lob0)
+            if verbose:
+                print(lob0)
             lobL3.append(lob0_l3)
         if (filePathName is not None)&(len(Ts)%100 == 0):
             with open(filePathName , "wb") as f: #"/home/konajain/params/"
