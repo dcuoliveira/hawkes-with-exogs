@@ -11,3 +11,17 @@
 [comment]: <> (1&#41; Install all packages)
 
 [comment]: <> (`bash install.sh`)
+
+2) Activate conda env
+
+[comment]: <> (`conda activate hwe`)
+
+3) Download .whl file to install `tick`
+
+Download the .whl file from https://pypi.org/project/tick/#files and run:
+
+[comment]: <> (`pip install file-name.whl`)
+
+
+
+
