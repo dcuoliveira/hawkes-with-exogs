@@ -2,11 +2,16 @@
 /.idea/
 /nphc2/
 
+# cython files
+*.pyc
+
 # vscode
 .DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
+src/hawkes/__pycache__
+src/hawkes/__pycache__/
 *.py[cod]
 *$py.class
 
