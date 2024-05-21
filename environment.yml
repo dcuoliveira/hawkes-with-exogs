@@ -8,7 +8,7 @@ dependencies:
   - python=3.8.0
   - mkl < 2022
   - pandas
-  - numpy
+  - numpy=1.23.5
   - tqdm
   - pytorch
   - jupyterlab
@@ -19,3 +19,7 @@ dependencies:
   - cvxopt
   - statsmodels
   - cvxpy
+  - seaborn
+  - tensorflow
+  - scikit-learn
+  - scipy

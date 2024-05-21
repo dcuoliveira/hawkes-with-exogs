@@ -18,8 +18,5 @@
 
     `git clone https://github.com/dcuoliveira/nphc.git nphc2`
 
-    `export PYTHONPATH="$PYTHONPATH:$(pwd)/nphc2"`
-
-
 
 
