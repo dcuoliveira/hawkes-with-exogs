@@ -23,3 +23,6 @@ dependencies:
   - tensorflow
   - scikit-learn
   - scipy
+  - pip
+  - pip:
+    - git+https://github.com/dcuoliveira/nphc
