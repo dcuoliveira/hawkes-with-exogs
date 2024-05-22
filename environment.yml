@@ -5,7 +5,7 @@ channels:
   - pytorch
   - pip
 dependencies:
-  - python=3.8.0
+  - python=3.9.0
   - mkl < 2022
   - pandas
   - numpy=1.23.5
@@ -24,5 +24,6 @@ dependencies:
   - scikit-learn
   - scipy
   - pip
+  - numba
   - pip:
     - git+https://github.com/dcuoliveira/nphc
