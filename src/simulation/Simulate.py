@@ -577,7 +577,7 @@ class Simulate:
                 sizes[col]  = size
                 dictTimestamps[col] = t
 
-            TsTmp, lobTmp, lobL3Tmp = createLOB(dictTimestamps, sizes, Pi_Q0, lob0 = lob0, lob0_l3 = lob0_l3)
+            TsTmp, lobTmp, lobL3Tmp = self.createLOB(dictTimestamps, sizes, Pi_Q0, lob0 = lob0, lob0_l3 = lob0_l3)
             spread = lobTmp[-1]['Ask_touch'][0] - lobTmp[-1]['Bid_touch'][0]
             lob0 = lobTmp[-1]
             lob0_l3 = lobL3Tmp[-1]
