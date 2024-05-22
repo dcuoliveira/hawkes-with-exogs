@@ -1,3 +1,6 @@
+src/data/inputs/*
+src/data/outputs/*
+
 /venv/
 /.idea/
 /nphc2/
