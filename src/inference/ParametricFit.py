@@ -1,18 +1,19 @@
 import numpy as np
-import pandas as pd
 import statsmodels.api as sm
-import pickle
-import datetime as dt
 from scipy.optimize import curve_fit
-import copy
 import matplotlib.pyplot as plt
+import os
+import pickle
+import pandas as pd
+import datetime as dt
+import copy
 
 from data.dataLoader import dataLoader
 
 class ParametricFit():
 
-    def __init__(self):
-        pass
+    def __init__(self, dataPath):
+        self.dataPath = dataPath
 
     def fitPowerLaw(self, norm): # integral infinity - how to control norm? - actually if t0 < min(t), then its ok
         # print(self.data)
@@ -108,14 +109,14 @@ class ParametricFit():
         cols = ["lo_deep_Ask", "co_deep_Ask", "lo_top_Ask","co_top_Ask", "mo_Ask", "lo_inspread_Ask" ,
                 "lo_inspread_Bid" , "mo_Bid", "co_top_Bid", "lo_top_Bid", "co_deep_Bid","lo_deep_Bid" ]
 
-        l = dataLoader.Loader(ric, sDate, eDate, nlevels = 2, dataPath = "/SAN/fca/Konark_PhD_Experiments/extracted/")
-        with open(l.dataPath + ric + "_Params_" + str(sDate.strftime("%Y-%m-%d")) + "_" + str(eDate.strftime("%Y-%m-%d")) + suffix , "rb") as f: #"/home/konajain/params/"
+        l = dataLoader(ric, sDate, eDate, nlevels = 2, dataPath = self.dataPath)
+        with open(os.path.join(l.dataPath, ric + "_Params_" + str(sDate.strftime("%Y-%m-%d")) + "_" + str(eDate.strftime("%Y-%m-%d")) + suffix), "rb") as f: #"/home/konajain/params/"
             thetas = pickle.load(f)
             for k, v in thetas.items():
                 theta1, theta2, theta3 = v
                 # thetas[k] = np.hstack([theta1[:,:5], theta2, theta3, theta1[:,5:]])
                 thetas[k] = np.hstack([theta2.transpose()[:,:5], theta1.transpose()*(avgSpread)**spreadBeta, theta3.transpose()*(avgSpread)**spreadBeta, theta2.transpose()[:,5:]])
-        with open(l.dataPath + ric + "_Params_2019-01-02_2019-03-29_dictTOD", "rb") as f:
+        with open(os.path.join(l.dataPath, ric + "_Params_2019-01-02_2019-03-29_dictTOD"), "rb") as f:
             tod = pickle.load(f)
         # each theta in kernel = \delta * h(midpoint)
         # Special Date:
@@ -296,6 +297,6 @@ class ParametricFit():
         for k in ["lo_top_", "lo_deep_", "co_top_", "co_deep_", "mo_", "lo_inspread_"]:
             params[k+"Ask"] = 0.5*(params[k+"Ask"]+params[k+"Bid"])
             params[k+"Bid"] = params[k+"Ask"]
-        with open(l.dataPath + ric + "_ParamsInferredWCutoffEyeMu_" + resID + "_" + str(sDate.strftime("%Y-%m-%d")) + "_" + str(eDate.strftime("%Y-%m-%d")) + "_CLSLogLin_" + str(len(timegridLin)) , "wb") as f: #"/home/konajain/params/"
+        with open(os.path.join(l.dataPath, ric + "_ParamsInferredWCutoffEyeMu_" + resID + "_" + str(sDate.strftime("%Y-%m-%d")) + "_" + str(eDate.strftime("%Y-%m-%d")) + "_CLSLogLin_" + str(len(timegridLin))), "wb") as f: #"/home/konajain/params/"
             pickle.dump(params, f)
         return params, res
