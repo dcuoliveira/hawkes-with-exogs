@@ -1,3 +1,11 @@
+DEBUG = False
+
+import os
+import sys
+
+if DEBUG:
+    sys.path.append(os.path.join(os.getcwd(), "src"))
+
 import numpy as np
 import pandas as pd
 import pickle
@@ -322,7 +330,7 @@ class Simulate:
                         if np.isnan(kernelParams[1][2]): continue
                         # decay = todMult*powerLawKernel(s - tau, alpha = kernelParams[0]*np.exp(kernelParams[1][0]), t0 = kernelParams[1][2], beta = kernelParams[1][1])
                         # print(decay)
-                        decay = todMult * powerLawCutoff(s - tau, kernelParams[0]*kernelParams[1][0], kernelParams[1][1], kernelParams[1][2])
+                        decay = todMult*powerLawCutoff(s - tau, kernelParams[0]*kernelParams[1][0], kernelParams[1][1], kernelParams[1][2])
                         decays[j] += decay
             decays = [np.max([0, d]) for d in decays]
             decays[5] = ((spread/avgSpread)**beta)*decays[5]
@@ -347,7 +355,7 @@ class Simulate:
                     if kernelParams is None: continue
                     if np.isnan(kernelParams[1][2]): continue
                     # decay = todMult*powerLawKernel(0, alpha = kernelParams[0]*np.exp(kernelParams[1][0]), t0 = kernelParams[1][2], beta = kernelParams[1][1])
-                    decay = todMult * powerLawCutoff(0, kernelParams[0]*kernelParams[1][0], kernelParams[1][1], kernelParams[1][2])
+                    decay = todMult*powerLawCutoff(0, kernelParams[0]*kernelParams[1][0], kernelParams[1][1], kernelParams[1][2])
                     # print(decay)
                     newdecays[i] += decay
                 newdecays = [np.max([0, d]) for d in newdecays]
@@ -384,6 +392,7 @@ class Simulate:
         """
         cols = ["lo_deep_Ask", "co_deep_Ask", "lo_top_Ask","co_top_Ask", "mo_Ask", "lo_inspread_Ask" ,
                 "lo_inspread_Bid" , "mo_Bid", "co_top_Bid", "lo_top_Bid", "co_deep_Bid","lo_deep_Bid" ]
+        
         if Pis == None:
             ## AAPL
             Pis = {'lo_deep_Bid': [0.0028405540014542,
@@ -591,3 +600,42 @@ class Simulate:
                 with open(filePathName , "wb") as f: #"/home/konajain/params/"
                     pickle.dump((Ts, lob, lobL3), f)
         return Ts, lob, lobL3
+    
+DEBUG = False
+
+if __name__ == "__main__":
+
+    if DEBUG:
+        model_name = 'simulation-hawkes'
+        inputs_path = os.path.join(os.getcwd(), "src", 'data', 'inputs')
+        outputs_path = os.path.join(os.getcwd(), "src", 'data', 'outputs')
+        cols = ["lo_deep_Ask", "co_deep_Ask", "lo_top_Ask","co_top_Ask", "mo_Ask", "lo_inspread_Ask" ,
+                "lo_inspread_Bid" , "mo_Bid", "co_top_Bid", "lo_top_Bid", "co_deep_Bid","lo_deep_Bid" ]
+
+        paramsPath = os.path.join(inputs_path, model_name, "fake_ParamsInferredWCutoff_sod_eod_true")
+        todPath = os.path.join(inputs_path, model_name, "fakeData_Params_sod_eod_dictTOD_constt")
+        simulate = Simulate()
+
+        # check if dir exists
+        if not os.path.exists(os.path.join(outputs_path, model_name)):
+            os.makedirs(os.path.join(outputs_path, model_name))
+
+        #### WARNING: THIS PIECE OF CODE TAKES A LONG TIME ####
+        for i in range(10):
+            T, lob, lobL3 = simulate.run(T=100, # 6.5*3600
+                                        paramsPath=paramsPath, 
+                                        todPath=todPath, 
+                                        beta=1., 
+                                        avgSpread=.01, 
+                                        spread0=5, 
+                                        price0=45,
+                                        verbose=False)
+            
+            if len(pd.DataFrame(T[1:])[0].unique()) != len(cols):
+                raise ValueError(f"Some columns are missing in the data 'T' for id = {i}")
+            
+            fakeSimPath = os.path.join(outputs_path, model_name, f"fake_simulated_sod_eod_{i}")
+
+            with open(fakeSimPath, "wb") as f:
+                pickle.dump((T, lob, lobL3), f)
+        
