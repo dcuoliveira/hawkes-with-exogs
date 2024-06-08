@@ -25,5 +25,6 @@ dependencies:
   - scipy
   - pip
   - numba
+  - osqp
   - pip:
     - git+https://github.com/dcuoliveira/nphc
