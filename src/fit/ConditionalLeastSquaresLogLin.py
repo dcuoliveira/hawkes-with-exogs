@@ -6,6 +6,8 @@ import gc
 import matplotlib.pyplot as plt
 import datetime as dt
 import statsmodels.api as sm
+from scipy import sparse
+import osqp
 
 class ConditionalLeastSquaresLogLin():
 
@@ -449,9 +451,12 @@ class ConditionalLeastSquaresLogLin():
         # TOD conditioning
         dfs = []
         for i in self.dates:
-            read_path = os.path.join(self.cfg.get("loader").dataPath, self.cfg.get("loader").ric + "_" + str(i) + "_12D.csv")
-            df = pd.read_csv(read_path)
-            dfs.append(df)
+            try:
+                read_path = os.path.join(self.cfg.get("loader").dataPath, self.cfg.get("loader").ric + "_" + str(i) + "_12D.csv")
+                df = pd.read_csv(read_path)
+                dfs.append(df)
+            except:
+                continue
         df = pd.concat(dfs)
         # Special Date:
         specDate = {
@@ -689,7 +694,7 @@ class ConditionalLeastSquaresLogLin():
                     params += (np.vstack(p),)
             params2, params3, params1 = params
             thetas[date] = (params1, params2, params3) #, paramsUncertainty)
-            with open(os.path.join(self.cfg.get("loader").dataPath, self.cfg.get("loader").ric + "_Params_" + date + "_" + date + "_IS_"+self.cfg.get("solver", "sgd")+"Sparse_bounds" + suffix), "wb") as f: #"/home/konajain/params/"
+            with open(os.path.join(self.cfg.get("loader").dataPath, self.cfg.get("loader").ric + "_Params_" + str(date) + "_" + str(date) + "_IS_" + self.cfg.get("solver", "sgd") + "Sparse_bounds" + suffix), "wb") as f: #"/home/konajain/params/"
                 pickle.dump(thetas[date], f)
         return thetas
 
@@ -872,3 +877,32 @@ class ConditionalLeastSquaresLogLin():
             pickle.dump(params, f)
 
         return
+    
+DEBUG = False
+
+if __name__ == "__main__":
+    if DEBUG:
+        import os
+        import sys
+
+        sys.path.append(os.path.join(os.getcwd(), 'src'))
+
+        from data.dataLoader import dataLoader
+
+        model_name = 'simulation-hawkes'
+        n_sims = 10
+        inputs_path = os.path.join(os.getcwd(), "src", 'data', 'inputs')
+        outputs_path = os.path.join(os.getcwd(), "src", 'data', 'outputs')
+
+        ric = "fake"
+        d = 0
+
+        error = []
+        l = dataLoader(ric, d, d, dataPath = os.path.join(outputs_path, model_name))
+        for d in range(n_sims):
+            df = pd.read_csv(os.path.join(l.dataPath, f"fake_{d}_12D.csv"))
+            
+            data = {str(i) : list(df.groupby('event')['Time'].apply(np.array)[cols].values)}
+
+            cls = ConditionalLeastSquaresLogLin(data, loader = l) 
+            cls.runTransformDate()
