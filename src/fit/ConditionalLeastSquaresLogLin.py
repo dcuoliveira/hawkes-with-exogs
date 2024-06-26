@@ -1,3 +1,11 @@
+DEBUG = False
+
+import os
+import sys
+
+if DEBUG:
+    sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 import numpy as np
 import pandas as pd
 import os
@@ -877,15 +885,9 @@ class ConditionalLeastSquaresLogLin():
             pickle.dump(params, f)
 
         return
-    
-DEBUG = False
 
 if __name__ == "__main__":
     if DEBUG:
-        import os
-        import sys
-
-        sys.path.append(os.path.join(os.getcwd(), 'src'))
 
         from data.dataLoader import dataLoader
 
@@ -895,14 +897,19 @@ if __name__ == "__main__":
         outputs_path = os.path.join(os.getcwd(), "src", 'data', 'outputs')
 
         ric = "fake"
+        dictIp = {}
         d = 0
-
-        error = []
         l = dataLoader(ric, d, d, dataPath = os.path.join(outputs_path, model_name))
         for d in range(n_sims):
-            df = pd.read_csv(os.path.join(l.dataPath, f"fake_{d}_12D.csv"))
-            
-            data = {str(i) : list(df.groupby('event')['Time'].apply(np.array)[cols].values)}
+            dictIp[d] = []
 
-            cls = ConditionalLeastSquaresLogLin(data, loader = l) 
-            cls.runTransformDate()
+        # define params path
+        path_dictTOD = os.path.join(inputs_path, model_name, "fakeData_Params_sod_eod_dictTOD_constt")
+
+        # fit the model
+        cls = ConditionalLeastSquaresLogLin(dictIp, loader = l, solver="osqp", path_dictTOD = path_dictTOD)
+        thetas = cls.fitConditionalInSpread(spreadBeta = 1., avgSpread = 1.)
+
+        # save the model params
+        with open(os.path.join(l.dataPath, f"{ric}_Params_2019-01-02_2019-03-31_CLSLogLin_19"), "wb") as f:
+            pickle.dump(thetas, f)
