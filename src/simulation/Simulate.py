@@ -4,7 +4,7 @@ import os
 import sys
 
 if DEBUG:
-    sys.path.append(os.path.join(os.getcwd(), "src"))
+    sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 import numpy as np
 import pandas as pd
