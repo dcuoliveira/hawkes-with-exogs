@@ -135,7 +135,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     model_name = 'simulation-hawkes'
-    n_sims = s.n_sims
+    n_sims = args.n_sims
     inputs_path = os.path.join(os.getcwd(), 'data', 'inputs')
     outputs_path = os.path.join(os.getcwd(), 'data', 'outputs')
 
