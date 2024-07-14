@@ -136,8 +136,8 @@ if __name__ == "__main__":
 
     model_name = 'simulation-hawkes'
     n_sims = args.n_sims
-    inputs_path = os.path.join(os.getcwd(), 'data', 'inputs')
-    outputs_path = os.path.join(os.getcwd(), 'data', 'outputs')
+    inputs_path = os.path.join(os.path.dirname(__file__), 'data', 'inputs')
+    outputs_path = os.path.join(os.path.dirname(__file__), 'data', 'outputs')
 
     ric = "fake"
     dataPath = os.path.join(outputs_path, model_name)
