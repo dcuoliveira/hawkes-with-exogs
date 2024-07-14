@@ -4,6 +4,9 @@ import numpy as np
 import tensorflow as tf
 import argparse
 
+from data.dataLoader import dataLoader
+from fit.ConditionalLeastSquaresLogLin import ConditionalLeastSquaresLogLin
+
 def exponential_excitation_log_likelihoodI(X, mu, alpha, beta):
     """
     Computes the log-likelihood of an M-variate Hawkes process using TensorFlow.
@@ -135,11 +138,28 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     model_name = 'simulation-hawkes'
+    ric = "fake"
+    cols = [
+    "lo_deep_Ask", "co_deep_Ask", "lo_top_Ask", "co_top_Ask", "mo_Ask", "lo_inspread_Ask" ,
+    "lo_inspread_Bid", "mo_Bid", "co_top_Bid", "lo_top_Bid", "co_deep_Bid","lo_deep_Bid"
+    ]
     n_sims = args.n_sims
     inputs_path = os.path.join(os.path.dirname(__file__), 'data', 'inputs')
     outputs_path = os.path.join(os.path.dirname(__file__), 'data', 'outputs')
 
-    ric = "fake"
+    # generate data
+    d = 0
+    error = []
+    l = dataLoader(ric, d, d, dataPath = os.path.join(outputs_path, model_name))
+    for i in range(n_sims):
+        df = pd.read_csv(os.path.join(l.dataPath, f"fake_{i}_12D.csv"))
+        
+        data = {str(i) : list(df.groupby('event')['Time'].apply(np.array)[cols].values)}
+
+        cls = ConditionalLeastSquaresLogLin(data, loader = l) 
+        cls.runTransformDate()
+
+    # read data
     dataPath = os.path.join(outputs_path, model_name)
     dictBinnedData = {}
     for d in range(n_sims):
