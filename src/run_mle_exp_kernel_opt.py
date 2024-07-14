@@ -147,18 +147,6 @@ if __name__ == "__main__":
     inputs_path = os.path.join(os.path.dirname(__file__), 'data', 'inputs')
     outputs_path = os.path.join(os.path.dirname(__file__), 'data', 'outputs')
 
-    # generate data
-    d = 0
-    error = []
-    l = dataLoader(ric, d, d, dataPath = os.path.join(outputs_path, model_name))
-    for i in range(n_sims):
-        df = pd.read_csv(os.path.join(l.dataPath, f"fake_{i}_12D.csv"))
-        
-        data = {str(i) : list(df.groupby('event')['Time'].apply(np.array)[cols].values)}
-
-        cls = ConditionalLeastSquaresLogLin(data, loader = l) 
-        cls.runTransformDate()
-
     # read data
     dataPath = os.path.join(outputs_path, model_name)
     dictBinnedData = {}
