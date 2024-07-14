@@ -8,8 +8,8 @@ from simulation.Simulate import Simulate
 file_source = os.path.dirname(__file__)
 parser = argparse.ArgumentParser()
 
-parser.add_argument("model_name", type=str, default="simulation-hawkes", help="Model name")
-parser.add_argument("seed", type=int, default=2, help="Random seed")
+parser.add_argument("--model_name", type=str, default="simulation-hawkes", help="Model name")
+parser.add_argument("--seed", type=int, default=2, help="Random seed")
 parser.add_argument("--n_sims", type=int, default=10, help="Number of simulations")
 parser.add_argument("--T", type=int, default=100, help="Time horizon")
 parser.add_argument("--inputs_path", type=str, default=os.path.join(file_source, 'data', 'inputs'), help="Inputs path")
