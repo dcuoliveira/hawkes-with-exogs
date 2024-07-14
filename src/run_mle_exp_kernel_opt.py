@@ -194,6 +194,8 @@ if __name__ == "__main__":
         return loss
 
     # Perform optimization
+    print("--------------------")
+    print(f"Optimizing {args.func_name} function")
     for epoch in range(args.n_epochs):
         loss = train_step()
         if epoch % 10 == 0:
