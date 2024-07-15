@@ -4,9 +4,6 @@ import numpy as np
 import tensorflow as tf
 import argparse
 
-from data.dataLoader import dataLoader
-from fit.ConditionalLeastSquaresLogLin import ConditionalLeastSquaresLogLin
-
 def exponential_excitation_log_likelihoodI(X, mu, alpha, beta):
     """
     Computes the log-likelihood of an M-variate Hawkes process using TensorFlow.
@@ -187,7 +184,6 @@ if __name__ == "__main__":
     # Define optimizer
     optimizer = tf.optimizers.Adam(learning_rate=0.01)
 
-    # Optimization step
     @tf.function
     def train_step():
         with tf.GradientTape() as tape:
@@ -206,9 +202,9 @@ if __name__ == "__main__":
     print(f"Optimizing {args.func_name} function")
     for epoch in range(args.n_epochs):
         loss = train_step()
-        if epoch % 10 == 0:
-            print(f"Epoch {epoch}, Loss: {loss.numpy()}")
+        print(f"Epoch {epoch}, Loss: {loss.numpy()}")
 
+    print("--------------------")
     print(f"Optimized mu: {mu.numpy()}")
     print(f"Optimized alpha: {alpha.numpy()}")
     print(f"Optimized beta: {beta.numpy()}")
