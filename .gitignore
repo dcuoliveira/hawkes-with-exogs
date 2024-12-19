@@ -1,4 +1,4 @@
-src/data/inputs/*
+src/data/inputs/simulation-hawkes/*
 src/data/outputs/*
 
 /venv/
