@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-INPUTS_PATH = os.path.join(os.getcwd(), 'data', 'inputs')
+INPUTS_PATH = os.path.join(os.path.dirname(__file__), 'data', 'inputs')
 
 DS_NAME = 'news'
 NEWS_VENUE = 'yahoo-finance'
@@ -13,7 +13,7 @@ for file in files:
     year = file.split('_')[0]
     data = pd.read_json(os.path.join(target_path, file))
 
-    output_path = os.path.join(os.getcwd(), 'data', 'inputs', DS_NAME, NEWS_VENUE, year)
+    output_path = os.path.join(os.path.dirname(__file__), 'data', 'inputs', DS_NAME, NEWS_VENUE, year)
     os.makedirs(output_path, exist_ok=True)
 
     data['date_publish'] = pd.to_datetime(data['date_publish'])
